@@ -6,13 +6,14 @@
 h1{
     background-color: #081b31;
     color: violet;
-    height: 5rem;
+    height: 100%; 
+    width: 100%;
     text-align: center;
     line-height: 4.5rem;
 }
 .choice{
-    height: 190px;
-    width: 190px;
+    height: 110px;
+    width : 110px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -20,11 +21,11 @@ h1{
 }
 .choice:hover{
 cursor: pointer;
-background-color: #081b31;
+background-color: rgb(179, 39, 104);
 }
 img{
-    height: 150px;
-    width: 150px;
+    height: 90px;
+    width: 90px;
     object-fit: contain;
     border-radius: 50%;
 }
