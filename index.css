@@ -38,6 +38,7 @@ img{
     align-items: center;
     gap: 2rem;
     margin-top: 3rem;
+    position: relative;
 }
 .score-board{
     display: flex;
@@ -64,18 +65,24 @@ img{
 }
 
 /*---*/
-.result-emoji {
-  font-size: 60px;
-  margin-top: 20px;
-  height: 50px;
-  transition: opacity 0.3s ease;
-}
+ .result-emoji { 
+  position: absolute;
+  top: 90px; 
+  left: 32%; 
+  /* transform: translate(-0%, -50%);  */
+  font-size: 90px;
+  animation: bounce 0.3-s ease;
+  z-index: 10; 
+  display: none;
+} 
 
-@keyframes bounce {
+
+ @keyframes bounce {
   0% { transform: translateY(0); }
   30% { transform: translateY(-15px); }
   50% { transform: translateY(0); }
   70% { transform: translateY(-10px); }
   100% { transform: translateY(0); }
-}
+}  
+
 

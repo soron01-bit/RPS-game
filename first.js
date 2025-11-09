@@ -141,16 +141,27 @@ choices.forEach((choice) => {
 
 // Emoji animation
 function showEmoji(type) {
-  if (!emoji) return; // skip if emoji element not found
+  const emoji = document.getElementById('resultEmoji');
+  if (!emoji) return;
 
+ 
   if (type === "win") emoji.textContent = "😄";
   else if (type === "lose") emoji.textContent = "😢";
   else emoji.textContent = "😐";
 
-  // Animate bounce
+  
+  emoji.style.display = "block";
+
+  
   emoji.style.animation = "none";
   setTimeout(() => {
-    emoji.style.animation = "bounce 0.6s ease";
+    emoji.style.animation = "bounce 0.3s ease";
   }, 10);
+
+  setTimeout(() => {
+    emoji.style.display = "none";
+  }, 1500); 
 }
+
+
 
