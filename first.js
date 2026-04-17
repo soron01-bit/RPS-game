@@ -1,158 +1,113 @@
-// let userScore=0;
-// let compScore=0;
-
-// const userScorePara= document.querySelector("#user-score");
-// const compScorePara= document.querySelector("#computer-score");
-// const choices= document.querySelectorAll(".choice");
-// const msg = document.querySelector("#msg");
-
-// const genCompChoice=()=>{
-//     const options=["rock","paper","scissor"];
-//     const randidx= Math.floor(Math.random()*3);
-//     return options[randidx];
-// }
-// const drawGame=()=>{
-//     console.log("tie");
-//     msg.innerText= "Game Draw! play again";
-//     msg.style.backgroundColor= "yellow";
-//     msg.style.color= "black";
-// }
-// const showWinner = (userWin,userchoice,CompChoice)=>{
-//     if(userWin){
-//         userScore++;;
-//         userScorePara.innerText= userScore;
-//         console.log("you win!");
-//         msg.innerText= `your ${userchoice} beats ${CompChoice} and You Win!`;
-//         msg.style.backgroundColor= "green";
-//         msg.style.color= "black";
-//     }else{
-//         compScore++;
-//         compScorePara.innerText= compScore;
-//         console.log("you Lose!");
-//         msg.innerText= `Computer's ${CompChoice} beats your ${userchoice} and You Lose!`;
-//         msg.style.backgroundColor= "red";
-//         msg.style.color= "black";
-//     }
-// }
-
-// const playGame=(userchoice)=>{
-//     console.log("user choice", userchoice);
-// const CompChoice= genCompChoice();
-//     console.log("comp choice", CompChoice);
-
-//     if(userchoice ===  CompChoice){
-//     drawGame();
-// }else{
-//     let userWin= true;
-//     if(userchoice === "rock"){  //scissors,paper
-//         userWin = (CompChoice === "paper")? false : true;
-//     }else if(userchoice === "paper"){ //rock,scissor
-//         userWin = (CompChoice === "scissor")? false : true;
-//     }else{ //rock,paper
-//         userWin = (CompChoice === "paper" )? true : false; 
-//     }
-//     showWinner(userWin,userchoice,CompChoice);
-// }
-// };
-
-// choices.forEach(choice => {
-//     choice.addEventListener("click",()=>{
-//         const userchoice= choice.getAttribute("id");
-//         playGame(userchoice);
-//     });
-// });
-
-
-
 let userScore = 0;
 let compScore = 0;
 
 const userScorePara = document.querySelector("#user-score");
 const compScorePara = document.querySelector("#computer-score");
 const choices = document.querySelectorAll(".choice");
+const choicesWrap = document.querySelector(".choices");
 const msg = document.querySelector("#msg");
-const emoji = document.querySelector("#resultEmoji"); // 👈 add this element in HTML
+const emoji = document.querySelector("#resultEmoji");
+const roundDetail = document.querySelector("#round-detail");
+const resetBtn = document.querySelector("#reset-btn");
 
-// Computer choice generate
 const genCompChoice = () => {
-  const options = ["rock", "paper", "scissors"];
+  const options = ["rock", "paper", "scissor"];
   const randidx = Math.floor(Math.random() * 3);
   return options[randidx];
 };
 
-// Draw situation
-const drawGame = (userchoice) => {
-  console.log("tie");
+const titleCase = (choice) => choice.charAt(0).toUpperCase() + choice.slice(1);
+
+const setMessageTheme = (type) => {
+  if (type === "win") {
+    msg.style.backgroundColor = "#2a9d5b";
+    msg.style.color = "#ffffff";
+    return;
+  }
+  if (type === "lose") {
+    msg.style.backgroundColor = "#d64545";
+    msg.style.color = "#ffffff";
+    return;
+  }
+  msg.style.backgroundColor = "#c9871f";
+  msg.style.color = "#101010";
+};
+
+const drawGame = (userchoice, compChoice) => {
   msg.innerText = `It's a Draw! You both chose ${userchoice}`;
-  msg.style.backgroundColor = "yellow";
-  msg.style.color = "black";
+  roundDetail.innerText = `${titleCase(userchoice)} met ${titleCase(compChoice)}. No points this round.`;
+  setMessageTheme("draw");
   showEmoji("draw");
 };
 
-// Show result message
-const showWinner = (userWin, userchoice, CompChoice) => {
+const showWinner = (userWin, userchoice, compChoice) => {
   if (userWin) {
     userScore++;
     userScorePara.innerText = userScore;
-    console.log("you win!");
-    msg.innerText = `Your ${userchoice} beats ${CompChoice}! You Win!`;
-    msg.style.backgroundColor = "green";
-    msg.style.color = "black";
+    msg.innerText = `Your ${userchoice} beats ${compChoice}! You Win!`;
+    roundDetail.innerText = `Clean move. ${titleCase(userchoice)} outplayed ${titleCase(compChoice)}.`;
+    setMessageTheme("win");
     showEmoji("win");
   } else {
     compScore++;
     compScorePara.innerText = compScore;
-    console.log("you lose!");
-    msg.innerText = `Computer's ${CompChoice} beats your ${userchoice}! You Lose!`;
-    msg.style.backgroundColor = "red";
-    msg.style.color = "black";
+    msg.innerText = `Computer's ${compChoice} beats your ${userchoice}! You Lose!`;
+    roundDetail.innerText = `Tough round. ${titleCase(compChoice)} counters ${titleCase(userchoice)}.`;
+    setMessageTheme("lose");
     showEmoji("lose");
   }
 };
 
-// Main game function
 const playGame = (userchoice) => {
-  console.log("user choice", userchoice);
-  const CompChoice = genCompChoice();
-  console.log("comp choice", CompChoice);
+  const compChoice = genCompChoice();
 
-  if (userchoice === CompChoice) {
-    drawGame(userchoice);
+  if (userchoice === compChoice) {
+    drawGame(userchoice, compChoice);
   } else {
-    let userWin = true;
-    if (userchoice === "rock") {
-      userWin = CompChoice === "paper" ? false : true;
-    } else if (userchoice === "paper") {
-      userWin = CompChoice === "scissors" ? false : true;
-    } else {
-      userWin = CompChoice === "rock" ? false : true;
-    }
-    showWinner(userWin, userchoice, CompChoice);
+    const userWin =
+      (userchoice === "rock" && compChoice === "scissor") ||
+      (userchoice === "paper" && compChoice === "rock") ||
+      (userchoice === "scissor" && compChoice === "paper");
+    showWinner(userWin, userchoice, compChoice);
   }
 };
 
-// Click listener for each choice
+const animateSigns = (selectedChoice) => {
+  choices.forEach((item) => {
+    item.classList.remove("animating", "press-animate");
+  });
+
+  // Force reflow so animation can restart even on repeated clicks.
+  void choicesWrap.offsetWidth;
+
+  choices.forEach((item) => item.classList.add("animating"));
+  selectedChoice.classList.add("press-animate");
+
+  setTimeout(() => {
+    choices.forEach((item) => item.classList.remove("animating", "press-animate"));
+  }, 380);
+};
+
 choices.forEach((choice) => {
   choice.addEventListener("click", () => {
     const userchoice = choice.getAttribute("id");
+
+    choices.forEach((item) => item.classList.remove("selected"));
+    choice.classList.add("selected");
+    animateSigns(choice);
+
     playGame(userchoice);
   });
 });
 
-// Emoji animation
 function showEmoji(type) {
-  const emoji = document.getElementById('resultEmoji');
   if (!emoji) return;
 
- 
   if (type === "win") emoji.textContent = "😄";
   else if (type === "lose") emoji.textContent = "😢";
   else emoji.textContent = "😐";
 
-  
   emoji.style.display = "block";
-
-  
   emoji.style.animation = "none";
   setTimeout(() => {
     emoji.style.animation = "bounce 0.3s ease";
@@ -160,8 +115,20 @@ function showEmoji(type) {
 
   setTimeout(() => {
     emoji.style.display = "none";
-  }, 1500); 
+  }, 1500);
 }
+
+resetBtn.addEventListener("click", () => {
+  userScore = 0;
+  compScore = 0;
+  userScorePara.innerText = userScore;
+  compScorePara.innerText = compScore;
+  msg.innerText = "Fresh start. Make your move";
+  msg.style.backgroundColor = "#22313f";
+  msg.style.color = "#ffffff";
+  roundDetail.innerText = "Scores cleared. Time to dominate.";
+  choices.forEach((item) => item.classList.remove("selected"));
+});
 
 
 
